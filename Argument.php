@@ -25,7 +25,7 @@ class Argument
 {
     const INVALID_ARGUMENT = 'Argument %d in %s() was expecting %s, however %s was given.';
 
-    protected static $stop = false;
+    protected static $stop = true;
 
 	/**
 	 * One of the hard thing about instantiating classes is
@@ -57,7 +57,7 @@ class Argument
     public function test($index, $types)
     {
         //if no test
-        if(self::$stop) {
+        if(static::$stop) {
             return $this;
         }
 
@@ -76,6 +76,18 @@ class Argument
     }
 
     /**
+     * By default we are turning this off
+     * You can turn it on with this method
+     *
+     * @return Eden\Core\Argument
+     */
+    public function start()
+    {
+        static::$stop = false;
+        return $this;
+    }
+
+    /**
      * In a perfect production environment,
      * we can assume that arguments passed in
      * all methods are valid. To increase
@@ -85,7 +97,7 @@ class Argument
      */
     public function stop()
     {
-        self::$stop = true;
+        static::$stop = true;
         return $this;
     }
 
@@ -101,7 +113,7 @@ class Argument
     public function virtual($method, array $args, $index, $types)
     {
         //if no test
-        if(self::$stop) {
+        if(static::$stop) {
             return $this;
         }
 
